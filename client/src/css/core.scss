@@ -1,0 +1,38 @@
+@import "./reset";
+
+.body {
+  padding: 16px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.center {
+  align-items: center;
+}
+
+.inputHeader {
+  font-size: 24px;
+  color: black;
+  margin-bottom: 4px;
+}
+
+.input {
+  height: 30px;
+  width: 150px;
+  font-size: 22px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.submitButton {
+  background-color: blue;
+  color: white;
+  height: 30px;
+  width: 100px;
+  border-radius: 4px;
+  font-size: 20px;
+}
