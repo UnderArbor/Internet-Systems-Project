@@ -16,9 +16,7 @@ import "./css/reset.scss";
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <div className="body">
-        <App />
-      </div>
+      <App />
     </Router>
   </React.StrictMode>,
   document.getElementById("root")

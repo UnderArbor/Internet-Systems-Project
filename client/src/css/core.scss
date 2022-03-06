@@ -1,38 +1,180 @@
 @import "./reset";
 
-.body {
+$noteWidth: 50px;
+$noteHeight: $noteWidth;
+
+$light-color: lighten(lightgrey, 5%);
+$dark-color: lighten(black, 10%);
+$body-font: Arial, Helvetica, sans-serif;
+$accent-color: lighten(orangered, 25%);
+#root {
+  background-color: $dark-color;
+}
+
+.page {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 16px;
 }
 
-.column {
+.body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  font-size: 56px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: $light-color;
+  margin: 24px 0;
+  text-decoration: underline;
+  text-decoration-color: $accent-color;
+}
+
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  width: 240px;
+}
+
+.resetButton {
+  font-size: 24px;
+  border: 1px solid $dark-color;
+  border-radius: 6px;
+  color: $dark-color;
+  background-color: $light-color;
+  transition: background-color 0.15s;
+  margin: 4px 0;
+  font-family: $body-font;
+}
+
+.resetButton:hover {
+  background-color: darkgrey;
+  transition: background-color 0.15s;
+}
+
+.gridContainer {
+  display: flex;
+  width: calc(#{$noteWidth} * 16);
+  flex-direction: row;
+  border: 2px solid $dark-color;
+}
+
+.musicBar {
+  height: 100%;
+  width: $noteWidth;
+}
+
+.activeMusicBar {
+}
+
+.musicNote {
+  height: $noteHeight;
+  width: $noteWidth;
+  background-color: $light-color;
+  border: 1px solid $dark-color;
+}
+
+.activeNote {
+  background-color: $accent-color;
+  transition: box-shadow 0.1s;
+}
+
+.playingNote {
+  box-shadow: inset 0 0 16px 4px $light-color;
+  transition: box-shadow 0.1s;
+}
+
+.tempoInput {
+  font-size: 24px;
+  border-radius: 6px;
+  background-color: $light-color;
+  color: $dark-color;
+  margin: 4px 0;
+  font-family: $body-font;
+  width: 100%;
+}
+
+.tempoText {
+  color: $light-color;
+  font-size: 26px;
+  margin: 4px 0;
+  font-family: $body-font;
+  text-align: center;
+  width: 100%;
+}
+
+.dropdownContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin: 16px 0;
+  width: 100%;
 }
 
-.center {
-  align-items: center;
+.dropdownHeader {
+  font-family: $body-font;
+  color: $light-color;
+  font-size: 26px;
 }
 
-.inputHeader {
+.Dropdown-root {
+  background-color: $light-color;
+  width: 100%;
   font-size: 24px;
-  color: black;
-  margin-bottom: 4px;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  margin: 4px 0;
 }
 
-.input {
-  height: 30px;
-  width: 150px;
-  font-size: 22px;
+.Dropdown-placeholder {
   border-radius: 4px;
-  margin-bottom: 16px;
 }
 
-.submitButton {
-  background-color: blue;
-  color: white;
-  height: 30px;
-  width: 100px;
-  border-radius: 4px;
-  font-size: 20px;
+.is-open {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.Dropdown-control {
+  font-family: $body-font;
+}
+
+.Dropdown-menu {
+  position: absolute;
+  background-color: $light-color;
+  width: 100%;
+  padding: 4px;
+  z-index: 10;
+}
+
+.Dropdown-option {
+  padding: 4px;
+  border-radius: 2px;
+  font-family: $body-font;
+  margin: 2px 0;
+}
+
+.Dropdown-option:hover {
+  color: $light-color;
+  background-color: $dark-color;
+}
+
+.is-selected {
+  background-color: $accent-color;
+  pointer-events: none;
+}
+
+.Dropdown-placeholder {
+  padding: 4px;
+  background-color: $light-color;
 }
