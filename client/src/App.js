@@ -1,155 +1,76 @@
-import React, { useState } from "react";
-import SongComponent from "./SongComponent";
-import SongGrid from "./SongGrid";
-import Dropdown from "react-dropdown";
+import React, { useState, useEffect } from "react";
+import { Route, Switch } from "react-router-dom";
+import MainPage from "./components/MainPage";
+import RegisterPage from "./components/RegisterPage";
+import LoginPage from "./components/LoginPage";
+
+var xmlhttp = new XMLHttpRequest();
 
 const App = (props) => {
-  const initialMusicSheet = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-  ];
+  const [username, setUsername] = useState("");
+  const [songList, setSongList] = useState([]);
 
-  const instrumentOptions = [
-    "amSynth",
-    "duoSynth",
-    "fmSynth",
-    "membraneSynth",
-    "monoSynth",
-    "pluckSynth",
-    "synth",
-  ];
+  function logout() {
+    sessionStorage.setItem("username", "");
+    setUsername("");
+    setSongList([]);
+  }
 
-  const effectOptions = [
-    "autoFilter",
-    "autoPanner",
-    "autoWah",
-    "bitCrusher",
-    "distortion",
-    "feedbackDelay",
-    "freeverb",
-    "panVol",
-    "temolo",
-  ];
-
-  const [musicSheet, setMusicSheet] = useState(initialMusicSheet);
-  const [playingIndex, setPlayingIndex] = useState(-1);
-  const [tempo, setTempo] = useState(90);
-  const [instrumentIndex, setInstrumentIndex] = useState(0);
-  const [effectIndex, setEffectIndex] = useState(0);
-
-  function toggleNote(barIndex, note, toggle) {
-    if (toggle) {
-      setMusicSheet([
-        ...musicSheet.slice(0, barIndex),
-        [...musicSheet[barIndex], note],
-        ...musicSheet.slice(barIndex + 1),
-      ]);
+  useEffect(async () => {
+    if (username !== "") {
+      sessionStorage.setItem("username", username);
+      await xmlhttp.open(
+        "GET",
+        `http://localhost/phpmyadmin/int_sys_db_auth/get_songs.php?username=${username}`,
+        true
+      );
+      xmlhttp.send();
+      xmlhttp.onload = () => {
+        var data = JSON.parse(xmlhttp.responseText);
+        Object.keys(data).forEach((key) => {
+          var notes = JSON.parse(data[key].notes);
+          var newSheet = [];
+          Object.keys(notes).forEach((note) => {
+            newSheet[note] = notes[note];
+          });
+          data[key].notes = newSheet;
+        });
+        setSongList(data);
+      };
     } else {
-      const noteIndex = musicSheet[barIndex].findIndex((barNote) => {
-        return note === barNote;
-      });
-      setMusicSheet([
-        ...musicSheet.slice(0, barIndex),
-        [
-          ...musicSheet[barIndex].slice(0, noteIndex),
-          ...musicSheet[barIndex].slice(noteIndex + 1),
-        ],
-        ...musicSheet.slice(barIndex + 1),
-      ]);
+      const tempname = sessionStorage.getItem("username");
+      if (tempname !== undefined && tempname !== null) setUsername(tempname);
     }
-  }
-
-  function onBarChange(event, index) {
-    setPlayingIndex(index);
-  }
+  }, [username]);
 
   return (
     <div className="page">
-      <p className="header">Music Master!!</p>
-      <div className="body">
-        <div className="optionsContainer">
-          <div className="dropdownContainer">
-            <p className="dropdownHeader">Instrument</p>
-            <Dropdown
-              options={instrumentOptions}
-              onChange={(e) => {
-                const newInstrument = e.value;
-                const newIndex = instrumentOptions.findIndex((instrument) => {
-                  return newInstrument === instrument;
-                });
-                setInstrumentIndex(newIndex);
-              }}
-              value={instrumentOptions[instrumentIndex]}
+      <Switch>
+        {username === "" && (
+          <Route
+            path="/register"
+            component={() => <RegisterPage setUsername={setUsername} />}
+          />
+        )}
+        {username === "" && (
+          <Route
+            path="/login"
+            component={() => <LoginPage setUsername={setUsername} />}
+          />
+        )}
+        <Route
+          path="/"
+          username={username}
+          component={() => (
+            <MainPage
+              username={username}
+              logout={logout}
+              songList={songList}
+              setSongList={setSongList}
             />
-          </div>
-          <div className="dropdownContainer">
-            <p className="dropdownHeader">Effect</p>
-            <Dropdown
-              options={effectOptions}
-              onChange={(e) => {
-                const newEffect = e.value;
-                const newIndex = effectOptions.findIndex((effect) => {
-                  return newEffect === effect;
-                });
-                setEffectIndex(newIndex);
-              }}
-              value={effectOptions[effectIndex]}
-            />
-          </div>
-          <div className="dropdownContainer">
-            <input
-              className="tempoInput"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") setTempo(e.target.value);
-                else if (
-                  isNaN(e.key) &&
-                  e.key !== "Delete" &&
-                  e.key !== "Backspace"
-                )
-                  e.preventDefault();
-              }}
-            ></input>
-            <p className="tempoText">Tempo: {tempo}bpm</p>
-          </div>
-          <button
-            className="resetButton"
-            onClick={() => {
-              setTempo(90);
-              setInstrumentIndex(0);
-              setEffectIndex(0);
-              setMusicSheet(initialMusicSheet);
-            }}
-          >
-            Reset
-          </button>
-        </div>
-        <SongComponent
-          musicSheet={musicSheet}
-          onBarChange={onBarChange}
-          tempo={tempo}
-          instrument={instrumentOptions[instrumentIndex]}
-          effect={effectOptions[effectIndex]}
+          )}
         />
-        <SongGrid
-          musicSheet={musicSheet}
-          toggleNote={toggleNote}
-          playingIndex={playingIndex}
-        />
-      </div>
+      </Switch>
     </div>
   );
 };

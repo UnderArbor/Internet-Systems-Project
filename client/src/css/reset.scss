@@ -24,6 +24,13 @@ $breakpoints: (
   }
 }
 
+@font-face {
+  font-family: "Tapestry", cursive;
+  src: url('https://fonts.googleapis.com/css2?family=Tapestry&display=swap');
+}
+
+$header-font: "Tapestry";
+
 *,
 *:before,
 *:after {

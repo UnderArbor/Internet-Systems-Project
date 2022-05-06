@@ -12,6 +12,8 @@ if (process.env.NODE_ENV !== "production") {
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 import "./css/reset.scss";
+import "./css/core.scss";
+import "./css/auth.scss";
 
 ReactDOM.render(
   <React.StrictMode>

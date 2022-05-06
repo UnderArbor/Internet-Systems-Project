@@ -1,6 +1,5 @@
 import React from "react";
 import { Song, Track, Instrument, Effect } from "reactronica";
-import "./css/core.scss";
 
 const SongComponent = ({
   musicSheet,

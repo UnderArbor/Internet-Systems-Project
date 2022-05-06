@@ -33,8 +33,12 @@ const SongGrid = ({ musicSheet, toggleNote, playingIndex }) => {
               return (
                 <div
                   key={"note" + barIndex + "&" + noteIndex}
-                  className={`musicNote ${activeNote ? "activeNote" : null} ${
-                    playingIndex === barIndex ? "playingNote" : null
+                  className={`musicNote ${
+                    activeNote ? "activeNote" : "inactiveNote"
+                  } ${
+                    playingIndex === barIndex && activeNote
+                      ? "playingNote"
+                      : null
                   }`}
                   onClick={() => toggleNote(barIndex, note, !activeNote)}
                 ></div>
